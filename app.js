@@ -9,14 +9,14 @@ var usersRouter = require('./routes/users');
 var riverRouter = require('./routes/river');
 var addmodRouter = require('./routes/addmod');
 var selectorRouter = require('./routes/selector');
-var Costume = require('./models/costume');
+var costume = require('./models/costume');
 var resource = require('./routes/resource');
 var badboy = require('./routes/badboy');
 
 
 var app = express();
 
-const connectionString =process.env.MONGO_CON
+const connectionString = 'mongodb+srv://s544922:Codbadboy%40123@cluster0.1kgjz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 mongoose = require('mongoose');
 mongoose.connect(connectionString,{useNewUrlParser: true,useUnifiedTopology: true});
 
@@ -44,6 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/river', riverRouter);
+// app.use('/costume', costumeRouter);
 app.use('/addmod', addmodRouter);
 app.use('/selector', selectorRouter);
 app.use('/resource', resource);
@@ -65,13 +66,13 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-module.exports = app;
+
 async function recreateDB(){
   // Delete everything
-  await Costume.deleteMany();
-  let instance1 = new  Costume({costume_type:"bike", size:'small',cost:26.4});
-  let instance2 = new  Costume({costume_type:"car", size:'large',cost:67.4});
-  let instance3 = new Costume({costume_type:"boat", size:'medium',cost:66.4});
+  await costume.deleteMany();
+  let instance1 = new  costume({costume_type:"bike", size:'small',cost:26.4});
+  let instance2 = new  costume({costume_type:"car", size:'large',cost:67.4});
+  let instance3 = new costume({costume_type:"boat", size:'medium',cost:66.4});
   instance1.save( function(err,doc) {
   if(err) return console.error(err);
   console.log("First object saved")

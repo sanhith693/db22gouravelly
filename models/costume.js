@@ -4,5 +4,5 @@ costume_type: String,
 size: String,
 cost: Number
 })
-module.exports = mongoose.model("Costume",
+module.exports = mongoose.model("costume",
 costumeSchema)
