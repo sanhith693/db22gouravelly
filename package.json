@@ -14,5 +14,18 @@
     "mongoose": "^6.0.12",
     "morgan": "^1.10.0",
     "pug": "^3.0.2"
-  }
+  },
+  "description": "Sanhith Gouravelly",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanhith693/db22gouravelly.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanhith693/db22gouravelly/issues"
+  },
+  "homepage": "https://github.com/sanhith693/db22gouravelly#readme"
 }

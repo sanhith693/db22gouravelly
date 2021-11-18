@@ -1,35 +1,63 @@
+//require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var Costume = require("./models/costume");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var riverRouter = require('./routes/river');
-var addmodRouter = require('./routes/addmod');
+//var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
-var costume = require('./models/costume');
-var resource = require('./routes/resource');
-var badboy = require('./routes/badboy');
+var resourceRouter = require('./routes/resource');
+var costumeRouter = require('./routes/costume');
 
-
-var app = express();
-
-const connectionString = 'mongodb+srv://s544922:Codbadboy%40123@cluster0.1kgjz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-mongoose = require('mongoose');
-mongoose.connect(connectionString,{useNewUrlParser: true,useUnifiedTopology: true});
-
-
-//Get the default connection
+const mongoose = require('mongoose');
 var db = mongoose.connection;
+
 //Bind connection to error event
 db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
 db.once("open", function(){
-console.log("Connection to DB succeeded")
-recreateDB();
+console.log("Connection to DB succeeded")});
+const connectionString =process.env.MONGO_CON 
+
+// We can seed the collection if needed on
+async function recreateDB(){
+ // Delete everything
+ await Costume.deleteMany();
+ let instance1 = new Costume({costume_type:"Ethinic", size:'xtra Small',cost:25.4});
+ instance1.save( function(err,doc) {
+ if(err) return console.error(err);
+ console.log("First object saved")
+ });
+ 
+ let instance2 = new Costume({costume_type:"Western", size:'Small', cost:10});
+ instance2.save( function(err,doc) {
+ if(err) return console.error(err);
+ console.log("Second object saved")
+});
+
+ let instance3 = new Costume({costume_type:"Party Wear", size:'Large',cost:30});
+ instance3.save( function(err,doc) {
+ if(err) return console.error(err);
+ console.log("Third object saved")
+ });
+
 }
-);
+
+let reseed = true;
+if (reseed) { 
+  recreateDB();
+}
+mongoose.connect(connectionString,
+  {
+    useNewUrlParser: true,
+  useUnifiedTopology: true
+  });
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,13 +72,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/river', riverRouter);
-// app.use('/costume', costumeRouter);
-app.use('/addmod', addmodRouter);
+//app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
-app.use('/resource', resource);
-app.use('/badboy', badboy);
-// catch 404 and forward to error handler
+app.use('/resource', resourceRouter);
+app.use('/costumes', costumeRouter);
+//catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log("sdkjbvvvvvvvvvvvvxc")
   next(createError(404));
 });
 
@@ -66,23 +94,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-async function recreateDB(){
-  // Delete everything
-  await costume.deleteMany();
-  let instance1 = new  costume({costume_type:"bike", size:'small',cost:26.4});
-  let instance2 = new  costume({costume_type:"car", size:'large',cost:67.4});
-  let instance3 = new costume({costume_type:"boat", size:'medium',cost:66.4});
-  instance1.save( function(err,doc) {
-  if(err) return console.error(err);
-  console.log("First object saved")
-  });
-  instance2.save( function(err,doc) {
-  if(err) return console.error(err);
-  console.log("second object saved")
-  });
-  instance3.save( function(err,doc) {
-  if(err) return console.error(err);
-  console.log("third object saved")
-    });
- }
